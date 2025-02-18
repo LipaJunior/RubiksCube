@@ -8,9 +8,15 @@ public class RubiksCube {
 
     public static void main(String[] args) {
         RubiksCube cube = new RubiksCube();
-        for (int i = 0; i < 6; i++) {
-            cube.sexyMove();
+        int count = 0;
+        cube.moveR();
+        cube.moveUprim();
+        while (!cube.isCubeCompleted()) {
+            cube.moveR();
+            cube.moveUprim();
+            count++;
         }
+        System.out.print(count + 1);
     }
 
     private void printCube() {
@@ -26,6 +32,25 @@ public class RubiksCube {
         printFace(Y);
         System.out.println("Back");
         printFace(O);
+    }
+
+    private boolean isCubeCompleted() {
+        if (isFaceComplted(W) && isFaceComplted(R) && isFaceComplted(B) && isFaceComplted(G) && isFaceComplted(O)
+                && isFaceComplted(Y)) {
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean isFaceComplted(char[][] face) {
+        for (int i = 0; i < face.length; i++) {
+            for (int j = 0; j < face.length; j++) {
+                if (face[i][j] != face[1][1]) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private static void printFace(char[][] face) {
