@@ -1,25 +1,24 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RubiksCube {
     static char[][] W = { { 'W', 'W', 'W' }, { 'W', 'W', 'W' }, { 'W', 'W', 'W' } };
-    static char[][] R = { { 'B', 'O', 'Y' }, { 'R', 'R', 'R' }, { 'R', 'R', 'R' } };
-    static char[][] B = { { 'G', 'B', 'Y' }, { 'B', 'B', 'B' }, { 'B', 'B', 'B' } };
-    static char[][] G = { { 'O', 'Y', 'Y' }, { 'G', 'G', 'G' }, { 'G', 'G', 'G' } };
-    static char[][] O = { { 'G', 'Y', 'R' }, { 'O', 'O', 'O' }, { 'O', 'O', 'O' } };
-    static char[][] Y = { { 'Y', 'R', 'O' }, { 'Y', 'Y', 'G' }, { 'R', 'Y', 'B' } };
+    static char[][] R = { { 'R', 'R', 'R' }, { 'R', 'R', 'R' }, { 'R', 'R', 'R' } };
+    static char[][] B = { { 'B', 'B', 'B' }, { 'B', 'B', 'B' }, { 'B', 'B', 'B' } };
+    static char[][] G = { { 'G', 'G', 'G' }, { 'G', 'G', 'G' }, { 'G', 'G', 'G' } };
+    static char[][] O = { { 'O', 'O', 'O' }, { 'O', 'O', 'O' }, { 'O', 'O', 'O' } };
+    static char[][] Y = { { 'Y', 'Y', 'Y' }, { 'Y', 'Y', 'Y' }, { 'Y', 'Y', 'Y' } };
 
     public static void main(String[] args) {
         RubiksCube cube = new RubiksCube();
         cube.printCube();
-
-        String[] moves = cube.solveCrossOnLastLayer(Y);
-        for (int i = 0; i < moves.length; i++) {
-            System.out.print(moves[i]);
-        }
-
+        cube.moveB();
+        // cube.makeMovesFromList(cube.solveCrossOnLastLayer());
+        cube.moveB();
     }
 
-    private static void printCube() {
+    private void printCube() {
         System.out.println("Up");
         printFace(W);
         System.out.println("Front");
@@ -91,7 +90,7 @@ public class RubiksCube {
         }
     }
 
-    private static void moveR() {
+    private void moveR() {
         rotateClockWise(B);
         char[] temp = new char[3];
         for (int i = 0; i < 3; i++) {
@@ -104,7 +103,7 @@ public class RubiksCube {
         printCube();
     }
 
-    private static void moveRprim() {
+    private void moveRprim() {
         rotateAntiClockWise(B);
         char[] temp = new char[3];
         for (int i = 0; i < 3; i++) {
@@ -117,7 +116,7 @@ public class RubiksCube {
         printCube();
     }
 
-    private static void moveL() {
+    private void moveL() {
         rotateClockWise(G);
         char[] temp = new char[3];
         for (int i = 0; i < 3; i++) {
@@ -130,7 +129,7 @@ public class RubiksCube {
         printCube();
     }
 
-    private static void moveLprim() {
+    private void moveLprim() {
         rotateAntiClockWise(G);
         char[] temp = new char[3];
         for (int i = 0; i < 3; i++) {
@@ -143,7 +142,7 @@ public class RubiksCube {
         printCube();
     }
 
-    private static void moveU() {
+    private void moveU() {
         rotateClockWise(W);
         char[] temp = new char[3];
         for (int i = 0; i < 3; i++) {
@@ -156,7 +155,7 @@ public class RubiksCube {
         printCube();
     }
 
-    private static void moveUprim() {
+    private void moveUprim() {
         rotateAntiClockWise(W);
         char[] temp = new char[3];
         for (int i = 0; i < 3; i++) {
@@ -169,7 +168,7 @@ public class RubiksCube {
         printCube();
     }
 
-    private static void moveF() {
+    private void moveF() {
         rotateClockWise(R);
         char[] temp = new char[3];
         for (int i = 0; i < 3; i++) {
@@ -182,7 +181,7 @@ public class RubiksCube {
         printCube();
     }
 
-    private static void moveFprim() {
+    private void moveFprim() {
         rotateAntiClockWise(R);
         char[] temp = new char[3];
         for (int i = 0; i < 3; i++) {
@@ -195,7 +194,7 @@ public class RubiksCube {
         printCube();
     }
 
-    private static void moveD() {
+    private void moveD() {
         rotateClockWise(Y);
         char[] temp = new char[3];
         for (int i = 0; i < 3; i++) {
@@ -208,8 +207,8 @@ public class RubiksCube {
         printCube();
     }
 
-    private static void moveDprim() {
-        rotateClockWise(Y);
+    private void moveDprim() {
+        rotateAntiClockWise(Y);
         char[] temp = new char[3];
         for (int i = 0; i < 3; i++) {
             temp[i] = R[2][i];
@@ -221,96 +220,122 @@ public class RubiksCube {
         printCube();
     }
 
-    private static void moveB() {
+    private void moveB() {
         rotateClockWise(O);
         char[] temp = new char[3];
         for (int i = 0; i < 3; i++) {
             temp[i] = W[0][i];
             W[0][i] = B[i][2];
-            B[i][2] = Y[2][i];
+            B[i][2] = Y[2][2 - i];
             Y[2][i] = G[i][0];
-            G[i][0] = temp[i];
+            G[2 - i][0] = temp[i];
         }
         printCube();
     }
 
-    private static void moveBprim() {
+    private void moveBprim() {
         rotateAntiClockWise(O);
         char[] temp = new char[3];
         for (int i = 0; i < 3; i++) {
             temp[i] = W[0][i];
             W[0][i] = G[i][0];
             G[i][0] = Y[2][i];
-            Y[2][i] = B[i][2];
+            Y[2][i] = B[2 - i][2];
             B[i][2] = temp[i];
         }
         printCube();
     }
 
-    private static void sexyMove() {
+    private void sexyMove() {
         moveR();
         moveU();
         moveRprim();
         moveUprim();
     }
 
-    private static String[] solveCrossOnLastLayer(char[][] face) {
-        char center = face[1][1];
-        char upper = face[0][1];
-        char left = face[1][0];
-        char right = face[1][2];
-        char down = face[2][1];
+    private String[] solveCrossOnLastLayer() {
+        char center = Y[1][1];
+        char upper = Y[0][1];
+        char left = Y[1][0];
+        char right = Y[1][2];
+        char down = Y[2][1];
         if (upper != center && left != center && right != center && down != center) {
-            return new String[] { "F", "R", "U", "R'", "U'", "F'", "B", "L", "U", "L'", "U", "B'", "F", "R", "U", "R'",
-                    "U'", "F'" };
+            return new String[] { "F", "L", "D", "L'", "D'", "F'", "B", "R", "D", "R'", "D'", "R", "D", "R'", "D'",
+                    "B'" };
         } else if (upper == center && left == center) {
-            return new String[] { "F", "R", "U", "R'", "U'", "R", "U", "R'", "U'", "F'" };
+            return new String[] { "B", "R", "D", "R'", "D'", "R", "D", "R'", "D'", "B'" };
         } else if (upper == center && right == center) {
-            return new String[] { "L", "F", "U", "F'", "U'", "F", "U", "F'", "U'", "L'" };
+            return new String[] { "L", "B", "U", "B'", "U'", "B", "U", "B'", "U'", "L'" };
         } else if (down == center && left == center) {
-            return new String[] { "R", "B", "U", "B'", "U'", "B", "U", "B'", "U'", "R'" };
+            return new String[] { "R", "F", "D", "F'", "D'", "F", "D", "F'", "D'", "R'" };
         } else if (down == center && right == center) {
-            return new String[] { "B", "L", "U", "L'", "U", "B'", "F", "R", "U", "R'", "U'", "F'" };
+            return new String[] { "F", "L", "D", "L'", "D'", "L", "D", "L'", "D'", "F'" };
         } else if (down == center && upper == center) {
-            return new String[] { "R", "B", "U", "B'", "U'", "R'" };
+            return new String[] { "L", "B", "D", "B'", "D'", "L'" };
         } else if (left == center && right == center) {
-            return new String[] { "F", "R", "U", "R'", "U'", "F'" };
+            return new String[] { "F", "L", "D", "L'", "D'", "F'" };
         } else {
             return null;
         }
 
     }
 
-    private static String[] lastLayerPart2(char[][] front, char[][] right, char[][] left, char[][] back) {
-        char frontSticker = front[0][1];
-        char frontCenter = front[1][1];
-        char rightSticker = right[0][1];
-        char rightCenter = right[1][1];
-        char leftSticker = left[0][1];
-        char leftCenter = left[1][1];
-        char backSticker = back[0][1];
-        char backCenter = back[1][1];
-        int count = howManyStickersInPlaceForPart2(front, right, left, back);
-        while (count < 2) {
-            moveU();
+    private String[] solveLastLayerPart2() {
+        List<String> moves = new ArrayList<>();
+        int count = howManyStickersInPlaceForPart2();
 
+        while (count < 2) {
+            moveD();
+            moves.add("D");
+            count = howManyStickersInPlaceForPart2();
         }
+
+        char frontSticker = R[2][1];
+        char frontCenter = R[1][1];
+        char rightSticker = B[2][1];
+        char rightCenter = B[1][1];
+        char leftSticker = G[2][1];
+        char leftCenter = G[1][1];
+        char backSticker = O[2][1];
+        char backCenter = O[1][1];
+
+        String[] additionalMoves;
         if (frontSticker == frontCenter && rightSticker == rightCenter && leftSticker == leftCenter
                 && backSticker == backCenter) {
-            return null;
+            return moves.toArray(new String[0]);
+        } else if (rightSticker == rightCenter && backSticker == backCenter) {
+            additionalMoves = new String[] { "D'", "B", "D'", "D'", "B'", "D'", "B", "D'", "B'" };
+        } else if (rightSticker == rightCenter && frontSticker == frontCenter) {
+            additionalMoves = new String[] { "D'", "R", "D'", "D'", "R'", "D'", "R", "D'", "R'" };
+        } else if (leftSticker == leftCenter && backSticker == backCenter) {
+            additionalMoves = new String[] { "D'", "L", "D'", "D'", "L'", "D'", "L", "D'", "L'" };
+        } else if (leftSticker == leftCenter && frontSticker == frontCenter) {
+            additionalMoves = new String[] { "D'", "F", "D'", "D'", "F'", "D'", "F", "D'", "F'" };
+        } else if (rightSticker == rightCenter && leftSticker == leftCenter) {
+            additionalMoves = new String[] { "D'", "L", "D'", "D'", "L'", "D'", "L", "D'", "L'", "B", "D'",
+                    "D'", "B'", "D'", "B", "D'", "B'" };
+        } else if (frontSticker == frontCenter && backSticker == backCenter) {
+            additionalMoves = new String[] { "D'", "B", "D'", "D'", "B'", "D'", "B", "D'", "B'", "R", "D'",
+                    "D'", "R'", "D'", "R", "D'", "R'" };
+        } else {
+            additionalMoves = new String[] {};
         }
+
+        moves.addAll(Arrays.asList(additionalMoves));
+
+        return moves.toArray(new String[0]);
     }
 
-    private static int howManyStickersInPlaceForPart2(char[][] front, char[][] right, char[][] left, char[][] back) {
+    private int howManyStickersInPlaceForPart2() {
         int count = 0;
-        char frontSticker = front[0][1];
-        char frontCenter = front[1][1];
-        char rightSticker = right[0][1];
-        char rightCenter = right[1][1];
-        char leftSticker = left[0][1];
-        char leftCenter = left[1][1];
-        char backSticker = back[0][1];
-        char backCenter = back[1][1];
+        char frontSticker = R[2][1];
+        char frontCenter = R[1][1];
+        char rightSticker = B[2][1];
+        char rightCenter = B[1][1];
+        char leftSticker = G[2][1];
+        char leftCenter = G[1][1];
+        char backSticker = O[2][1];
+        char backCenter = O[1][1];
         if (frontSticker == frontCenter) {
             count++;
         }
@@ -324,6 +349,51 @@ public class RubiksCube {
             count++;
         }
         return count;
+    }
+
+    private void makeMovesFromList(String[] moves) {
+        for (int i = 0; i < moves.length; i++) {
+            switch (moves[i]) {
+                case "R":
+                    moveR();
+                    break;
+                case "R'":
+                    moveRprim();
+                    break;
+                case "L":
+                    moveL();
+                    break;
+                case "L'":
+                    moveLprim();
+                    break;
+                case "U":
+                    moveU();
+                    break;
+                case "U'":
+                    moveUprim();
+                    break;
+                case "D":
+                    moveD();
+                    break;
+                case "D'":
+                    moveDprim();
+                    break;
+                case "F":
+                    moveF();
+                    break;
+                case "F'":
+                    moveFprim();
+                    break;
+                case "B":
+                    moveB();
+                    break;
+                case "B'":
+                    moveBprim();
+                    break;
+                default:
+                    System.out.println("Unknown move: " + moves[i]);
+            }
+        }
     }
 
 }
